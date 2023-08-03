@@ -8,7 +8,10 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+      else res.send({ data: user });
+    })
     .catch((err) => res.status(500).send({ message: err.name }));
 };
 
@@ -17,23 +20,37 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => {
-      res.status(201).send({ data: user });
+      res.send({ data: user });
     })
-    .catch((err) => res.status(500).send({ message: err.name }));
+    .catch((err) => res.status(400).send({ message: err.name }));
 };
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-    .then((user) => { res.send(user); })
-    .catch((err) => res.status(500).send({ message: err.name }));
+    .then((user) => {
+      if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+      else res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы невалидные данные' });
+      }
+    });
 };
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
-    .then((user) => { res.send(user); })
-    .catch((err) => res.status(500).send({ message: err.name }));
+    .then((user) => {
+      if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+      else res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы невалидные данные' });
+      }
+    });
 };
