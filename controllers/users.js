@@ -12,7 +12,7 @@ module.exports.getUserById = (req, res) => {
       if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
       else res.send(user);
     })
-    .catch((err) => res.status(500).send({ message: err.name }));
+    .catch((err) => res.status(400).send({ message: err.name }));
 };
 
 module.exports.createUser = (req, res) => {
@@ -28,7 +28,7 @@ module.exports.createUser = (req, res) => {
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
       else res.send({ data: user });
@@ -45,7 +45,7 @@ module.exports.updateAvatar = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
-      if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+      if (!user) res.status(400).send({ message: 'Запрашиваемый пользователь не найден' });
       else res.send({ data: user });
     })
     .catch((err) => {
