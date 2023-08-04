@@ -21,14 +21,14 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   Card.findById(req.params.cardId)
     .then((card) => {
-      if (!card) res.status(400).send({ message: 'Карточка c указанным _id не найдена.' });
+      if (!card) res.status(404).send({ message: 'Переданы некорректные данные при удалении карточки' });
       else {
         Card.deleteOne(card)
           .then(() => res.send(card));
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') res.status(404).send({ message: 'Переданы некорректные данные при удалении карточки.' });
+      if (err.name === 'CastError') res.status(400).send({ message: 'Карточка c указанным _id не найдена' });
     });
 };
 
