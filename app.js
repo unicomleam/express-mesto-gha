@@ -17,8 +17,12 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
+app.use('*', (req, res) => {
+  res.status(404).send({ message: 'Ресурс не найден' });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
