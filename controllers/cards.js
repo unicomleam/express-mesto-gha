@@ -15,7 +15,7 @@ module.exports.createCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR).send({ message: 'Переданы невалидные данные' });
-      }
+      } else res.status(SERVER_ERROR).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -25,11 +25,13 @@ module.exports.deleteCard = (req, res) => {
       if (!card) res.status(NOT_FOUND_ERROR).send({ message: 'Переданы некорректные данные при удалении карточки' });
       else {
         Card.deleteOne(card)
-          .then(() => res.send(card));
+          .then(() => res.send(card))
+          .catch(() => res.status(SERVER_ERROR).send({ message: 'Произошла ошибка' }));
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') res.status(BAD_REQUEST_ERROR).send({ message: 'Карточка c указанным _id не найдена' });
+      else res.status(SERVER_ERROR).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -43,7 +45,7 @@ module.exports.putLike = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR).send({ message: 'Переданы некорректные данные для постановки лайка' });
-      }
+      } else res.status(SERVER_ERROR).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -57,6 +59,6 @@ module.exports.deleteLike = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR).send({ message: 'Переданы некорректные данные для постановки лайка' });
-      }
+      } else res.status(SERVER_ERROR).send({ message: 'Произошла ошибка' });
     });
 };
