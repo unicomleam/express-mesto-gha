@@ -1,18 +1,19 @@
 const User = require('../models/user');
+const { BAD_REQUEST_ERROR, NOT_FOUND_ERROR, SERVER_ERROR } = require('../utils/server-err');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => res.status(500).send({ message: err.name }));
+    .catch((err) => res.status(SERVER_ERROR).send({ message: err.name }));
 };
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
-      if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+      if (!user) res.status(NOT_FOUND_ERROR).send({ message: 'Запрашиваемый пользователь не найден' });
       else res.send(user);
     })
-    .catch((err) => res.status(400).send({ message: err.name }));
+    .catch((err) => res.status(BAD_REQUEST_ERROR).send({ message: err.name }));
 };
 
 module.exports.createUser = (req, res) => {
@@ -22,7 +23,7 @@ module.exports.createUser = (req, res) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch((err) => res.status(400).send({ message: err.name }));
+    .catch((err) => res.status(BAD_REQUEST_ERROR).send({ message: err.name }));
 };
 
 module.exports.updateUser = (req, res) => {
@@ -30,12 +31,12 @@ module.exports.updateUser = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
-      if (!user) res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+      if (!user) res.status(NOT_FOUND_ERROR).send({ message: 'Запрашиваемый пользователь не найден' });
       else res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы невалидные данные' });
+        res.status(BAD_REQUEST_ERROR).send({ message: 'Переданы невалидные данные' });
       }
     });
 };
@@ -45,12 +46,12 @@ module.exports.updateAvatar = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
-      if (!user) res.status(400).send({ message: 'Запрашиваемый пользователь не найден' });
+      if (!user) res.status(BAD_REQUEST_ERROR).send({ message: 'Запрашиваемый пользователь не найден' });
       else res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы невалидные данные' });
+        res.status(BAD_REQUEST_ERROR).send({ message: 'Переданы невалидные данные' });
       }
     });
 };

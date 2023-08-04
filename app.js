@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const { NOT_FOUND_ERROR } = require('./utils/server-err');
 
 const { PORT = 3000 } = process.env;
 
@@ -21,7 +22,7 @@ app.use((req, res, next) => {
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 app.use('*', (req, res) => {
-  res.status(404).send({ message: 'Ресурс не найден' });
+  res.status(NOT_FOUND_ERROR).send({ message: 'Ресурс не найден' });
 });
 
 app.listen(PORT, () => {
