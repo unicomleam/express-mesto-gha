@@ -10,13 +10,6 @@ module.exports.signup = celebrate({
   }),
 });
 
-module.exports.signin = celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-});
-
 module.exports.getUserByIdValidation = celebrate({
   params: Joi.object().keys({
     userId: Joi.string().length(24).hex().required(),
@@ -46,6 +39,13 @@ module.exports.createCardValidation = celebrate({
 module.exports.deleteCardValidation = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().length(24).hex().required(),
+  }),
+});
+
+module.exports.signin = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
   }),
 });
 
