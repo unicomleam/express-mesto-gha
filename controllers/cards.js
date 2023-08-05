@@ -2,6 +2,7 @@ const Card = require('../models/card');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const { CREATED_STATUS } = require('../utils/server-err');
 
 module.exports.getAllCards = (req, res, next) => {
   Card.find({})
@@ -13,7 +14,7 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.send(card)) ///
+    .then((card) => res.status(CREATED_STATUS).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Переданы невалидные данные'));
