@@ -13,10 +13,12 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  User.findById(req.user._id)
+  const userId = req.user._id;
+  User.findById(userId)
+    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Такого пользователя не существует.'));
+        return next(new NotFoundError('Такого пользователя не существует.'));
       }
       res.send({ data: user });
     })
