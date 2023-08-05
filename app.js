@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const cookieParser = require('cookie-parser');
 
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -19,6 +20,7 @@ const app = express();
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {});
 
 app.use(helmet());
+app.use(cookieParser());
 app.use(express.json());
 
 app.post('/signin', signin, login);
