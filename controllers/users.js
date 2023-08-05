@@ -52,7 +52,7 @@ module.exports.createUser = (req, res, next) => {
       });
     })
     .then((user) => {
-      res.status(CREATED_STATUS).send(user);
+      res.status(CREATED_STATUS).send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
