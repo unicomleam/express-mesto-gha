@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
-const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 
 const usersRouter = require('./routes/users');
@@ -20,7 +19,7 @@ const app = express();
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {});
 
 app.use(helmet());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.post('/signin', signin, login);
 app.post('/signup', signup, createUser);
@@ -39,4 +38,4 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(PORT);
+app.listen(PORT, () => { console.log(`Сервер запущен на порту ${PORT}`); });
