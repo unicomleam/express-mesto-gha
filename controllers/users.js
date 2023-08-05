@@ -14,7 +14,7 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => res.send(user))
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
