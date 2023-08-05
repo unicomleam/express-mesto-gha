@@ -41,10 +41,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
-});
+}, {
+  toJSON: { useProjection: true },
+  toObject: { useProjection: true },
+}, { versionKey: false });
 
-/*  eslint func-names: ["error", "never"]  */
-
+// eslint-disable-next-line func-names
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
