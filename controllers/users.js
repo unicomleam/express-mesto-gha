@@ -16,9 +16,9 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError('Такого пользователя не существует.'));
+        next(new NotFoundError('Такого пользователя не существует.'));
       }
-      return res.send(user);
+      res.send({ data: user });
     })
     .catch(next);
 };
