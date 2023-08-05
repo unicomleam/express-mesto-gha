@@ -9,7 +9,7 @@ const { login, createUser } = require('./controllers/users');
 const { signup, signin } = require('./middlewares/validation');
 const auth = require('./middlewares/auth');
 
-const ServerError = require('./errors/ServerError');
+const { SERVER_ERROR } = require('./utils/server-err');
 const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
@@ -33,8 +33,8 @@ app.use('*', (req, res, next) => {
 
 app.use(errors());
 app.use((err, req, res, next) => {
-  const { statusCode = ServerError } = err;
-  res.status(statusCode).send({ message: statusCode === ServerError ? 'Стандартная ошибка' : err.message });
+  const { statusCode = SERVER_ERROR } = err;
+  res.status(statusCode).send({ message: statusCode === SERVER_ERROR ? 'Стандартная ошибка' : err.message });
   next();
 });
 

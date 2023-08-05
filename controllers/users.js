@@ -33,25 +33,26 @@ module.exports.getCurrentUser = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const newUser = req.body;
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
 
-  bcrypt.hash(newUser.password, 10)
+  bcrypt.hash(password, 10)
     .then((hash) => {
       User.create({
-        name: newUser.name,
-        about: newUser.about,
-        avatar: newUser.avatar,
-        email: newUser.email,
+        name,
+        about,
+        avatar,
+        email,
         password: hash,
       });
     })
     .then((user) => {
-      const {
-        name, about, avatar, email,
-      } = user;
-      res.status(CREATED_STATUS).send({
-        name, about, avatar, email,
-      });
+      res.status(CREATED_STATUS).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
